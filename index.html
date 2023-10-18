@@ -11,8 +11,16 @@
 
 <body>
   <script>
- debugger
-  _.chunk(['a', 'b', 'c', 'd'], 2);
+
+
+
+const wrappedFunction = ary(function(a, b, c) {
+  console.log(a, b, c);
+}, 3);
+
+wrappedFunction(1, 2, 3); // 输出: 1, 2
+wrappedFunction(1, 2, 3, 4); // 仅输出: 1, 2，忽略第三个参数
+
   </script>
 </body>
 
