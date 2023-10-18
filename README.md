@@ -207,3 +207,28 @@ function ary(func, n) {
   }
 }
 ```
+
+4. _.bindKey(object, key, [partials])
+- 创建一个函数,在object[key]上通过接收partials附加参数，调用这个方法。
+```js
+// 与ary类似
+// 简单实现
+function bindKey() {
+  let obj = arguments[0],
+      key = arguments[1],
+      length = arguments.length,
+      args = []
+  while (length > 2) {
+    args[length - 3] = arguments[length - 1]
+    length--
+  }
+  return function () {
+    let len = arguments.length
+    while(len <= 1) {
+      args[len] = arguments[len - 1]
+      len++
+    }
+    return obj[key].apply(obj, args)
+  }
+}
+```
