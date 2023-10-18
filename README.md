@@ -232,3 +232,76 @@ function bindKey() {
   }
 }
 ```
+
+
+5. _.curry(func, [arity=func.length])
+- 柯里化
+```js
+// 与_ary类似也是通过createWrap函数创建一个链条
+function curry(func, arity, guard) {
+  arity = guard ? undefined : arity;
+  var result = createWrap(func, WRAP_CURRY_FLAG, arity);
+  result.placeholder = curry.placeholder;
+  return result;
+}
+// 返回wrapper时
+function wrapper() {
+  // 获取到的参数长度小于需要的长度时返回createRecurry继续获取函数
+  if (length < arity) {
+    return createRecurry();
+  }
+  // 参数收集完毕，执行
+  var fn = (this && this !== root && this instanceof wrapper) ? Ctor : func;
+  return apply(fn, this, args);
+}
+// 简单实现自己的柯里化函数
+function curry(func) {
+  let length = func.length,
+    args = [],
+    cur = function () {
+      args.push(...arguments)
+      if (args.length != length) {
+        // 继续返回cur收集参数
+        return cur
+      } else {
+        func.apply(this, args)
+      }
+    }
+  return cur
+}
+```
+
+6. _.memoize(func, [resolver])
+- 函数记忆，保存函数的返回值，当遇到同一个缓存值时不再运行函数返回缓存的值
+```js
+function memoize(func, resolver) {
+  var memoized = function() {
+    var args = arguments,
+        // key
+        key = resolver ? resolver.apply(this, args) : args[0],
+        cache = memoized.cache
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    var result = func.apply(this, args);
+    memoized.cache = cache.set(key, result) || cache;
+    return result;
+  };
+  // 保存值
+  memoized.cache = new (memoize.Cache || MapCache);
+  return memoized;
+}
+// 简单实现
+function memoize(func) {
+  const cache = new Map()
+  return function () {
+    const key = JSON.stringify(arguments[0])
+    if (cache.get(key)) {
+      return cache.get(key)
+    }
+    let res = func.apply(null, arguments)
+    cache.set(key, res)
+    return res
+  }
+}
+```

@@ -10452,6 +10452,7 @@
      * }, 'deferred');
      * // => Logs 'deferred' after one millisecond.
      */
+
     var defer = baseRest(function(func, args) {
       return baseDelay(func, 1, args);
     });
