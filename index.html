@@ -13,28 +13,29 @@
   <script>
 
 
-    function memoize(func) {
-      const cache = new Map()
+
+    function before(func, n) {
+      let res
       return function () {
-        const key = JSON.stringify(arguments[0])
-        if (cache.get(key)) {
-          return cache.get(key)
+        if (n > 0) {
+          res = func.apply(this)
+          n--
+        } else {
+          func = undefined
         }
-        let res = func.apply(null, arguments)
-        cache.set(key, res)
+  
         return res
       }
     }
-    function get(obj) {
-      return Object.values(obj)
+    function initialize() {
+     
+      return Math.random();
     }
-    let b = memoize(get)
-    let obj = {
-      a: 1,
-      b: 2
-    }
-    console.log(b(obj))
-    console.log(b(obj))
+let b = before(initialize, 2)
+console.log(b())
+console.log(b())
+console.log(b())
+console.log(b())
   </script>
 </body>
 

@@ -305,3 +305,26 @@ function memoize(func) {
   }
 }
 ```
+
+
+7. _.once(func)
+- 创建一个只能调用 func 一次的函数。 重复调用返回第一次调用的结果
+```js
+// 底层使用before实现的，当次数为2时
+function once(func) {
+  return before(2, func);
+}
+// 简单实现
+function before(func, n) {
+  let res
+  return function () {
+    if (n > 0) {
+      res = func.apply(this)
+      n--
+    } else {
+      func = undefined
+    }
+    return res
+  }
+}
+```
