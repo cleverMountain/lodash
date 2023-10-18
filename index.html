@@ -13,37 +13,28 @@
   <script>
 
 
-    var object = {
-      'user': 'fred',
-      'greet': function (greeting, punctuation) {
-      
-        return greeting + ' ' + this.user + punctuation;
-      }
-    };
-
-    // var bound = _.bindKey(object, 'greet', 'hi');
-    // debugger
-    // bound('!');
-    function bindKey() {
-      let obj = arguments[0],
-          key = arguments[1],
-          length = arguments.length,
-          args = []
-      while (length > 2) {
-        args[length - 3] = arguments[length - 1]
-        length--
-      }
+    function memoize(func) {
+      const cache = new Map()
       return function () {
-        let len = arguments.length
-        while(len <= 1) {
-          args[len] = arguments[len - 1]
-          len++
+        const key = JSON.stringify(arguments[0])
+        if (cache.get(key)) {
+          return cache.get(key)
         }
-        return obj[key].apply(obj, args)
+        let res = func.apply(null, arguments)
+        cache.set(key, res)
+        return res
       }
     }
-    var bound = bindKey(object, 'greet', 'hi');
-    console.log(bound('!'))
+    function get(obj) {
+      return Object.values(obj)
+    }
+    let b = memoize(get)
+    let obj = {
+      a: 1,
+      b: 2
+    }
+    console.log(b(obj))
+    console.log(b(obj))
   </script>
 </body>
 
