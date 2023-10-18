@@ -120,3 +120,90 @@ function mixin(object, source, options) {
   return object;
 }
 ```
+
+# 函数部分
+1. _.before(n, func)
+- 创建一个调用func的函数，通过this绑定和创建函数的参数调用func，调用次数不超过 n 次。 之后再调用这个函数，将返回一次最后调用func的结果。
+```js
+function before(n, func) {
+  var result;
+  // 必须是函数
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  // 次数
+  n = toInteger(n);
+  // 闭包，返回一个新函数，利用保存的次数n，每调用一次n就--,
+  // 当n > 0时调用传入的方法，并返回值，当n < 0时不调用直接返回undefined
+  return function() {
+    if (--n > 0) {
+      result = func.apply(this, arguments);
+    }
+    if (n <= 1) {
+      func = undefined;
+    }
+    return result;
+  };
+}
+```
+
+2. _.after(n, func)
+```js
+function after(n, func) {
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  n = toInteger(n);
+  return function() {
+    if (--n < 1) {
+      return func.apply(this, arguments);
+    }
+  };
+}
+```
+
+3. _.ary(func, [n=func.length])
+- func.length是参数的长度
+- 创建一个调用func的函数。调用func时最多接受 n个参数，忽略多出的参数。
+```js
+function ary(func, n, guard) {
+  n = guard ? undefined : n;
+  n = (func && n == null) ? func.length : n;
+  return createWrap();
+}
+function createWrap () {
+  result createHybrid.apply(undefined, newData)
+  return setWrapToString(setter(result, newData), func, bitmask);
+}
+function createHybrid() {
+  function wrapper() {
+
+  }
+  return wrapper
+}
+// 最后返回的是wrapper
+function wrapper() {
+  // 获取参数长度
+  var length = arguments.length,
+      args = Array(length), // 空数组
+      index = length
+  // args = JSON.parse(JSON.strgify(arguments))
+  while (index--) {
+    args[index] = arguments[index];
+  }
+  return fn.apply(thisBinding, args);
+}
+
+// 自己简单实现
+// 创建一个函数，最多接受两个参数
+function ary(func, n) {
+  return function() {
+   let length = arguments.length
+       args = []     
+   while(n--) {
+    args[index] = arguments[index]
+   }
+   return func.apply(this, args)
+  }
+}
+```
