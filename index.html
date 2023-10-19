@@ -1,41 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="./lodash.js"></script>
+
 </head>
 
 <body>
+  <button id="clickButton">Click me</button>
+  <script src="./lodash.js"></script>
   <script>
-
-
-
-    function before(func, n) {
-      let res
+    function throttle(func, wait) {
+      let pre = new Date().getTime()
       return function () {
-        if (n > 0) {
-          res = func.apply(this)
-          n--
-        } else {
-          func = undefined
-        }
-  
-        return res
+        let that = this
+        let now = new Date().getTime()
+        if (now - pre > wait) {
+          func.apply(that, arguments)
+          pre = now
+        } 
       }
     }
-    function initialize() {
-     
-      return Math.random();
+    // 获取按钮元素
+    const clickButton = document.getElementById('clickButton');
+
+    // 创建节流函数，每1000毫秒执行一次
+
+    const throttledClick = throttle(handleClick, 1000);
+
+    // 模拟需要限制执行频率的事件处理函数
+    function handleClick() {
+      console.log('Button clicked!');
     }
-let b = before(initialize, 2)
-console.log(b())
-console.log(b())
-console.log(b())
-console.log(b())
+
+    // 监听按钮的点击事件，使用节流函数处理
+    clickButton.addEventListener('click', throttledClick);
   </script>
 </body>
 

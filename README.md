@@ -328,3 +328,47 @@ function before(func, n) {
   }
 }
 ```
+
+8. _.debounce(func, [wait=0], [options=])
+- 防抖
+```js
+// 简单实现
+function debounce(func, wait, options) {
+  let timer
+  wait = wait || 1000
+  let { leading } = options
+  return function () {
+    let that = this
+    if (leading == true) {
+      // 立即执行
+      func.apply(that, arguments)
+      leading = false
+    } else {
+      // 防抖
+      if (timer) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        func.apply(that, arguments)
+      }, wait)
+    }
+  }
+}
+```
+
+9. _.throttle(func, [wait=0], [options=])
+- 节流
+```js
+// 简单节流
+function throttle(func, wait) {
+  let pre = new Date().getTime()
+  return function () {
+    let that = this
+    let now = new Date().getTime()
+    if (now - pre > wait) {
+      func.apply(that, arguments)
+      pre = now
+    } 
+  }
+}
+```
