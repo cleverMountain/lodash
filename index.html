@@ -6,34 +6,17 @@
 </head>
 
 <body>
-  <button id="clickButton">Click me</button>
+
   <script src="./lodash.js"></script>
   <script>
-    function throttle(func, wait) {
-      let pre = new Date().getTime()
-      return function () {
-        let that = this
-        let now = new Date().getTime()
-        if (now - pre > wait) {
-          func.apply(that, arguments)
-          pre = now
-        } 
-      }
+    function deepClone(data) {
+      const type =  Object.prototype.toString.call(data)
+      console.log(type)
     }
-    // 获取按钮元素
-    const clickButton = document.getElementById('clickButton');
+    var objects = [{ 'a': 1 }, { 'b': 2 }];
 
-    // 创建节流函数，每1000毫秒执行一次
+    var deep = deepClone(objects);
 
-    const throttledClick = throttle(handleClick, 1000);
-
-    // 模拟需要限制执行频率的事件处理函数
-    function handleClick() {
-      console.log('Button clicked!');
-    }
-
-    // 监听按钮的点击事件，使用节流函数处理
-    clickButton.addEventListener('click', throttledClick);
   </script>
 </body>
 
