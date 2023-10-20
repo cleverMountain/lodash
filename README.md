@@ -372,3 +372,34 @@ function throttle(func, wait) {
   }
 }
 ```
+
+10. _.attempt(func, [args])
+- 捕捉错误对象
+```js
+function attempt(func) {
+  try {
+    func()
+  } catch(e) {
+    debugger
+  }
+}
+// 捕获错误函数
+function catchErr() {
+  const func = arguments[0]
+  const isCatch = arguments[1] || false
+  if (!isCatch) {
+    try {
+      func.apply(null, args)
+    } catch (e) {
+    }
+  } else {
+    return new Promise((resolve, reject) => {
+      try {
+        resolve(func.apply(null))
+      } catch (e) {
+        reject(e)
+      }
+    })
+  }
+}
+```
