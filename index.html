@@ -9,14 +9,65 @@
 
   <script src="./lodash.js"></script>
   <script>
-    function deepClone(data) {
-      const type =  Object.prototype.toString.call(data)
-      console.log(type)
+    let obj = {
+      a: 1,
+      b: 2,
+      c: {
+        d: 1
+      },
+      e: [
+        {
+          f: 1
+        },
+        2
+      ],
+      g() {
+        return 1
+      }
     }
-    var objects = [{ 'a': 1 }, { 'b': 2 }];
+    let obj1 = [
+      {
+        a: 1
+      },
+      2
+    ]
+    function deepClone(obj) {
+      const objType = Object.prototype.toString.call(obj)
+      const res = objType === '[object Object]' ? {} : []
+      function clone(obj, res) {
+        if (objType === '[object Object]') {
+          for (let key in obj) {
+            const item = obj[key]
+            const type = Object.prototype.toString.call(item)
+            if (type === '[object Object]') {
+              res[key] = {}
+              for (let k in item) {
+                clone(item, res[key])
+              }
+            } else if (type === '[object Array]') {
+              res[key] = []
+              console.log(item)
+              for (let i= 0 ; i < item.length;i++) {
+             
+                res[key][i] = item[i]
+              }
+            } else {
+              console.log(item)
+              res[key] = item
+            }
+          }
+        } else {
+          for (let i of obj) {
+            const ite = obj[i]
+            res[key].push(clone(ite))
+          }
+        }
+      }
+      clone(obj, res)
+      return res
+    }
 
-    var deep = deepClone(objects);
-
+    console.log(deepClone(obj))
   </script>
 </body>
 

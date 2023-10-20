@@ -404,91 +404,28 @@ function catchErr() {
 }
 ```
 
-10. 
+10. deepClone
+- 深拷贝
 ```js
-let obj = {
-      a: 1,
-      b: 2,
-      c: {
-        d: 1
-      },
-      e: [
-        {
-          f: 1
-        },
-        2
-      ],
-      g() {
-        return 1
-      }
+function deepClone(obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj; // 如果不是对象或是 null，直接返回
+  }
+  if (Array.isArray(obj)) {
+    // 如果是数组，创建一个新数组并递归复制元素
+    const clonedArray = [];
+    for (let i = 0; i < obj.length; i++) {
+      clonedArray[i] = deepClone(obj[i]);
     }
-    let obj1 = [
-      {
-        a: 1
-      },
-      2
-    ]
-    function deepClone(obj) {
-      const objType = Object.prototype.toString.call(obj)
-      const res = objType === '[object Object]' ? {} : []
-      function clone(obj, res) {
-        if (objType === '[object Object]') {
-          for (let key in obj) {
-            const item = obj[key]
-            const type = Object.prototype.toString.call(item)
-            if (type === '[object Object]') {
-              res[key] = {}
-              for (let k in item) {
-                clone(item, res[key])
-              }
-            } else if (type === '[object Array]') {
-              res[key] = []
-              for (let i of item) {
-                const ite = item[i]
-                res[key].push(clone(ite, {}))
-              }
-            } else {
-              console.log(item)
-              res[key] = item
-            }
-          }
-        } else {
-          for (let i of obj) {
-            const ite = obj[i]
-            res[key].push(clone(ite))
-          }
-        }
-      }
-      clone(obj, res)
-      return res
-    }
-    // function deepClone(obj) {
-    //   if (obj === null || typeof obj !== 'object') {
-    //     return obj; // 如果不是对象或是 null，直接返回
-    //   }
-
-    //   if (Array.isArray(obj)) {
-    //     // 如果是数组，创建一个新数组并递归复制元素
-    //     const clonedArray = [];
-    //     for (let i = 0; i < obj.length; i++) {
-    //       clonedArray[i] = deepClone(obj[i]);
-    //     }
-    //     return clonedArray;
-    //   }
-
-    //   // 如果是普通对象，创建一个新对象并递归复制属性
-    //   const clonedObj = {};
-    //   for (let key in obj) {
-    //     if (obj.hasOwnProperty(key)) {
-    //       clonedObj[key] = deepClone(obj[key]);
-    //     }
-    //   }
-
-    //   return clonedObj;
-    // }
-
-
-    console.log(deepClone(obj))
-
-
+    return clonedArray;
+  }
+  // 如果是普通对象，创建一个新对象并递归复制属性
+  const clonedObj = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      clonedObj[key] = deepClone(obj[key]);
+    }  
+  return clonedObj;
+  }
+}
 ```
